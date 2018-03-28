@@ -1,0 +1,39 @@
+jira_docker
+docker run --mount type=volume,src=jira-seed,dst=/tmp -p 8080:8080 -it ubuntu:16.04 bash
+root@2ed40dbe4f40:/# ./tmp/installer/xxx.bin
+root@2ed40dbe4f40:/# cp /tmp/installer/mysql-connector-java-5.1.46-bin.jar /opt/atlassian/jira/lib/
+<snapshot docker images> powpao/jira-sd:3.11.1
+root@ubuntu:~/dev_project/jira_docker# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                     PORTS                    NAMES
+8a70d145bd48        ubuntu:16.04        "bash"                   7 minutes ago       Exited (0) 6 minutes ago                            jovial_borg
+544229d1dc91        mysql:latest        "docker-entrypoint.s…"   24 minutes ago      Up 24 minutes              0.0.0.0:3306->3306/tcp   gracious_wiles
+root@ubuntu:~/dev_project/jira_docker# 
+root@ubuntu:~/dev_project/jira_docker# docker ps -l -q
+8a70d145bd48
+root@ubuntu:~/dev_project/jira_docker# docker commit -m "jira servicedesk 3.11.1 ready with mysql connector" -a "powpao" `docker ps -l -q` powpao/jira-sd:3.11.1
+sha256:998eb8665a54808880e1d07450ffbfd2a7fa80408b5f6ea53a7a16073632e0af
+root@ubuntu:~/dev_project/jira_docker# docker images | grep jira-sd
+powpao/jira-sd                3.11.1              998eb8665a54        20 seconds ago      643MB
+root@ubuntu:~/dev_project/jira_docker# 
+
+<start without mount>
+docker run -p 8080:8080 -itd powpao/jira-sd:3.11.1 bash -c "service jira start&&tail -f /dev/null"
+browse: http://localhost:8080
+root@2ed40dbe4f40:service jira start
+
+upload to docker hub
+docker login --username=yourhubusername 
+<password>
+docker tag < yourhubusername/verse_gapminder:firsttry
+
+
+
+
+mysql_docker
+docker run --env-file ./mysql/.env --mount type=volume,src=jira-mysql,dst=/var/lib/mysql -p 3306:3306 -d mysql:latest \
+--character-set-server=utf8 \
+--collation-server=utf8_bin
+
+
+
+
