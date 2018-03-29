@@ -2,23 +2,23 @@ version: '3'
  
 # Define the services/ containers to be run
 services:
-    jira:
+    jira-sd:
         image: powpao/jira-sd:3.11.1
-        container_name: jira_helpdesk
+        container_name: jira-sd
         ports:
             - "8080:8080"
         command: 
-            'bash -c "service jira start && tail -f /dev/null"'
-    db:
-        image: mysql:latest
-        container_name: jira_mysql
+            'bash -c "./opt/atlassian/jira/bin/start-jira.sh -fg"'
+    jira-sd-db:
+        image: mysql:5.7.21
+        container_name: jira-sd-mysql
         volumes:
-            - mysql:/var/lib/mysql
+            - jira-sd-mysql:/var/lib/mysql
         ports:
             - "3306:3306"
         command: mysqld --user=root --verbose --character-set-server=utf8 --collation-server=utf8_bin
         #environment:
         env_file:
-            - ./mysql/.env
+            - ./mysql/jira-sd.env
 volumes:
-    mysql:
+    jira-sd-mysql:

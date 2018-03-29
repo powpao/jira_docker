@@ -35,5 +35,6 @@ docker run --env-file ./mysql/.env --mount type=volume,src=jira-mysql,dst=/var/l
 --collation-server=utf8_bin
 
 
-
+docker-compose -f docker-compose.jira-sd.yml up -d
+docker-compose -f docker-compose.jira-confluence.yml up -d
 
