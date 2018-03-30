@@ -38,3 +38,7 @@ docker run --env-file ./mysql/.env --mount type=volume,src=jira-mysql,dst=/var/l
 docker-compose -f docker-compose.jira-sd.yml up -d
 docker-compose -f docker-compose.jira-confluence.yml up -d
 
+
+stop all container
+docker stop $(docker ps -aq)
+
